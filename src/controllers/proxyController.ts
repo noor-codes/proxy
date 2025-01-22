@@ -18,7 +18,7 @@ export const proxyRequest = async (req: Request, res: Response) => {
 
   try {
     isDev && consola.info(`Proxying request to: ${chalk.blue.underline(url)}`)
-    const response = await fetchUrl(url)
+    const response = await fetchUrl(url, req)
     isDev && consola.success(`Successfully proxied request to: ${chalk.green.bold(url)}`)
     res.json(response.data)
   } catch (error) {
