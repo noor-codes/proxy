@@ -1,6 +1,6 @@
 import cors from 'cors'
 import express from 'express'
-import proxyRoutes from '@routes/proxy.routes'
+import proxyRoutes from '@/routes/routes'
 
 import { config } from '@/config'
 import { loggerMiddleware } from '@middleware/logger'
