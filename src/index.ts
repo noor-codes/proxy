@@ -1,9 +1,10 @@
 import cors from 'cors'
+import chalk from 'chalk'
 import express from 'express'
+import consola from 'consola'
 import proxyRoutes from '@/routes/routes'
 
 import { config } from '@/config'
-import { loggerMiddleware } from '@middleware/logger'
 
 const app = express()
 
@@ -15,12 +16,14 @@ if (config.nodeEnv === 'development') {
 // Middleware
 app.use(cors())
 app.use(express.json())
-app.use(loggerMiddleware)
 
 // Routes
 app.use('/', proxyRoutes)
 
 // Start server
 app.listen(config.port, () => {
-  console.log(`Server started on port ${config.port}`)
+  const protocol = config.nodeEnv === 'production' ? 'https' : 'http'
+  const host = `localhost:${config.port}`
+  const url = `${protocol}://${host}`
+  consola.success(`The server is running at ${chalk.blue.underline(url)}`)
 })
