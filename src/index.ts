@@ -9,9 +9,9 @@ import { config } from '@/config'
 
 // Configure consola based on debug mode
 if (config.debugMode) {
-  consola.level = 4  // Show debug logs
+  consola.level = 4 // Show debug logs
 } else {
-  consola.level = 3  // Show info logs and above
+  consola.level = 3 // Show info logs and above
 }
 
 const app = express()
@@ -39,5 +39,5 @@ app.listen(config.port, () => {
   const protocol = config.nodeEnv === 'production' ? 'https' : 'http'
   const host = `localhost:${config.port}`
   const url = `${protocol}://${host}`
-  consola.success(`The server is running at ${chalk.blue.underline(url)}`)
+  consola.success(`🚀 Proxy server launched at ${chalk.blue.underline.bold(url)} 🛡️`)
 })

@@ -14,6 +14,7 @@ export const proxyRequest = async (req: Request, res: Response<unknown | ErrorRe
   const isFaviconRequest = urlParam?.includes('favicon.ico')
 
   if (!isFaviconRequest) {
+    consola.debug(chalk.white('----------------------------------------------'))
     consola.debug(chalk.cyan(`${req.method} ${req.originalUrl}`))
   }
 
