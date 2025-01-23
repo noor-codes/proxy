@@ -24,6 +24,17 @@ export const getGuide = (_req: Request, res: Response) => {
           ],
         },
       },
+      corsExample: {
+        description: 'Try these examples in your browser console:',
+        withoutProxy: `fetch('https://jsonplaceholder.typicode.com/todos/1')
+  .then(response => response.json())
+  .then(json => console.log(json))
+  .catch(error => console.error('Error:', error));`,
+        withProxy: `fetch('http://localhost:3000/google.com')
+  .then(response => response.text())
+  .then(html => console.log(html))
+  .catch(error => console.error('Error:', error));`,
+      },
     },
     features: [
       'Automatic HTTPS',
@@ -34,28 +45,25 @@ export const getGuide = (_req: Request, res: Response) => {
     ],
     examples: [
       {
-        description: 'Get user information from JSONPlaceholder API',
         url: `${config.proxyUrl}/jsonplaceholder.typicode.com/users/1`,
-        method: 'GET'
+        method: 'GET',
       },
       {
-        description: 'Get todos from JSONPlaceholder API',
         url: `${config.proxyUrl}/jsonplaceholder.typicode.com/todos/1`,
-        method: 'GET'
+        method: 'GET',
       },
       {
-        description: 'Create a new post (JSONPlaceholder)',
         url: `${config.proxyUrl}/jsonplaceholder.typicode.com/posts`,
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
         body: {
           title: 'Example Post',
           body: 'This is a test post',
-          userId: 1
-        }
-      }
+          userId: 1,
+        },
+      },
     ],
     errors: {
       'Invalid URL': {
