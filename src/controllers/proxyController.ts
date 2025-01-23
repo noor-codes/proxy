@@ -39,6 +39,12 @@ export const proxyRequest = async (req: Request, res: Response<any | ErrorRespon
     debugMode && consola.info(`Proxying request to: ${chalk.blue.underline(targetUrl)}`)
     const response = await fetchUrl(targetUrl, req)
     debugMode && consola.success(`Successfully proxied request to: ${chalk.green.bold(targetUrl)}`)
+    
+    // Forward all headers from the proxied response
+    response.headers.forEach((value, key) => {
+      res.setHeader(key, value)
+    })
+    
     res.status(response.status).json(response.data)
   } catch (error) {
     if (error instanceof TypeError) {
