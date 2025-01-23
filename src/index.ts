@@ -7,10 +7,17 @@ import proxyRoutes from '@/routes/routes'
 
 import { config } from '@/config'
 
+// Configure consola based on debug mode
+if (config.debugMode) {
+  consola.level = 4  // Show debug logs
+} else {
+  consola.level = 3  // Show info logs and above
+}
+
 const app = express()
 
 // Clear console in development mode
-if (config.nodeEnv === 'development') {
+if (config.nodeEnv === 'development' && config.debugMode) {
   console.clear()
 }
 
