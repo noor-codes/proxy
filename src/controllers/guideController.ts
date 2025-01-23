@@ -26,11 +26,11 @@ export const getGuide = (_req: Request, res: Response) => {
       },
       corsExample: {
         description: 'Try these examples in your browser console:',
-        withoutProxy: `fetch('https://jsonplaceholder.typicode.com/todos/1')
+        withoutProxy: `fetch('https://google.com')
   .then(response => response.json())
   .then(json => console.log(json))
   .catch(error => console.error('Error:', error));`,
-        withProxy: `fetch('http://localhost:3000/google.com')
+        withProxy: `fetch('${config.nodeEnv === 'development' ? `http://localhost:${config.port}` : config.proxyUrl}/google.com')
   .then(response => response.text())
   .then(html => console.log(html))
   .catch(error => console.error('Error:', error));`,
