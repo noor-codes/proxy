@@ -1,7 +1,7 @@
 import { Request } from 'express'
 
 interface ProxyResponse {
-  data: any;
+  data: unknown;
   status: number;
   headers: Headers;
 }
@@ -32,7 +32,7 @@ export const fetchUrl = async (url: string, req: Request): Promise<ProxyResponse
   
   try {
     const response = await fetch(url, config);
-    let data;
+    let data: unknown;
     const contentType = response.headers.get('content-type');
     
     // Handle response based on content type

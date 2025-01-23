@@ -110,18 +110,16 @@ Response:
 
 ## Environment Variables
 
-Create a `.env` file in the root directory:
+Create a `.env` file in the root directory and add the following variables:
 
-```env
-PORT=3000              # Port number for the server (default: 3000)
-NODE_ENV=development   # Node environment (development/production)
-DEBUG_MODE=true       # Enable/disable debug logging (true/false)
+```bash
+PORT=3000              # Port number for the server
+NODE_ENV=development   # Environment (development/production)
+DEBUG_MODE=true       # Enable debug logging
+PROXY_URL=https://your-proxy-domain.com  # Your proxy server's public URL
 ```
 
-These variables can be configured in your `.env` file:
-- `PORT`: The port number where the server will run
-- `NODE_ENV`: The environment mode (development/production)
-- `DEBUG_MODE`: When set to true, enables detailed logging of proxy requests and responses
+The `PROXY_URL` is used in the API documentation and response examples. Make sure to set it to your actual proxy domain in production.
 
 ## Available Scripts
 
