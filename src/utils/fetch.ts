@@ -1,7 +1,14 @@
 import chalk from 'chalk'
 import consola from 'consola'
-
 import { Request } from 'express'
+
+// Custom error class for fetch failures
+export class FetchError extends Error {
+  constructor(message: string, public url: string) {
+    super(message)
+    this.name = 'FetchError'
+  }
+}
 
 interface ProxyResponse {
   data: unknown
@@ -41,6 +48,12 @@ export const fetchUrl = async (url: string, req: Request): Promise<ProxyResponse
 
   try {
     const response = await fetch(url, config)
+    
+    // Handle non-2xx responses
+    if (!response.ok) {
+      throw new FetchError(`HTTP error! status: ${response.status}`, url)
+    }
+    
     let data: unknown
     const contentType = response.headers.get('content-type')
 
@@ -57,10 +70,9 @@ export const fetchUrl = async (url: string, req: Request): Promise<ProxyResponse
       headers: response.headers,
     }
   } catch (error) {
-    return {
-      data: { error: 'Failed to fetch from target URL' },
-      status: 500,
-      headers: new Headers(),
+    if (error instanceof FetchError) {
+      throw error
     }
+    throw new FetchError('Failed to fetch from target URL', url)
   }
 }

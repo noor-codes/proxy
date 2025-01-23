@@ -38,13 +38,20 @@ src/
 - Node.js (v14 or higher)
 - Yarn or npm
 
-## Installation
+## Installation and Running the Project
 
 1. Clone the repository
-2. Install dependencies:
+2. Install dependencies and run the project:
 
 ```bash
-yarn install
+# Install dependencies
+yarn
+
+# Build the project
+yarn build
+
+# Start the server
+yarn start
 ```
 
 ## Development
@@ -53,15 +60,6 @@ Run the development server with hot-reload:
 
 ```bash
 yarn dev
-```
-
-## Production
-
-Build and start the production server:
-
-```bash
-yarn build
-yarn start
 ```
 
 ## Usage

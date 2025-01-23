@@ -1,12 +1,25 @@
 import chalk from 'chalk'
 import consola from 'consola'
 
-import { fetchUrl } from '@utils/fetch'
+import { fetchUrl, FetchError } from '@utils/fetch'
 import { Request, Response } from 'express'
+import { getGuide } from './guideController'
 
 export interface ErrorResponse {
   error: string
   details?: string
+}
+
+// Function to validate URL
+const isValidUrl = (urlString: string): boolean => {
+  try {
+    // Add protocol if missing
+    const urlToTest = urlString.startsWith('http') ? urlString : `https://${urlString}`
+    new URL(urlToTest)
+    return true
+  } catch (error) {
+    return false
+  }
 }
 
 export const proxyRequest = async (req: Request, res: Response<unknown | ErrorResponse>) => {
@@ -19,11 +32,15 @@ export const proxyRequest = async (req: Request, res: Response<unknown | ErrorRe
   }
 
   if (!urlParam) {
-    consola.warn(chalk.yellow('Request rejected: Missing URL parameter'))
-    return res.status(400).json({
-      error: 'Invalid URL',
-      details: 'URL parameter is required',
-    })
+    return getGuide(req, res)
+  }
+
+  // Validate URL before attempting to fetch
+  if (!isValidUrl(urlParam)) {
+    if (!isFaviconRequest) {
+      consola.error(chalk.red(`Invalid URL: ${urlParam}`))
+    }
+    return getGuide(req, res)
   }
 
   try {
@@ -34,25 +51,34 @@ export const proxyRequest = async (req: Request, res: Response<unknown | ErrorRe
 
     const response = await fetchUrl(url, req)
     if (!isFaviconRequest) {
-      consola.debug(chalk.green(`Proxy response successful`))
+      if (response.status >= 200 && response.status < 300) {
+        consola.debug(chalk.blue(`Succeeded to fetch from ${urlParam}`))
+        consola.debug(chalk.green(`Proxy response successful (${response.status})`))
+      } else {
+        consola.error(chalk.red(`Proxy response unsuccessful (${response.status})`))
+      }
     }
     res.status(response.status).json(response.data)
   } catch (error) {
-    consola.error(chalk.red('Proxy request failed:'), {
-      error:
-        error instanceof Error
-          ? {
-              name: error.name,
-              message: error.message,
-              stack: error.stack,
-            }
-          : error,
-      url: urlParam,
-      method: req.method,
-    })
-    res.status(500).json({
-      error: 'Request Failed',
-      details: error instanceof Error ? error.message : 'Unknown error occurred',
-    })
+    // Only log if it's not a FetchError
+    if (!(error instanceof FetchError)) {
+      consola.error(chalk.red('Unexpected proxy error:'), {
+        error:
+          error instanceof Error
+            ? {
+                name: error.name,
+                message: error.message,
+                stack: error.stack,
+              }
+            : error,
+        url: urlParam,
+        method: req.method,
+      })
+    } else if (!isFaviconRequest) {
+      consola.debug(chalk.blue(`Failed to fetch from ${urlParam}`))
+      consola.debug(chalk.red(`Proxy response unsuccessful (${500})`))
+    }
+
+    return getGuide(req, res)
   }
 }

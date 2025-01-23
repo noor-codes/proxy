@@ -1,11 +1,13 @@
+import { config } from '@/config'
+import { getGuide } from '@/controllers/guideController'
+
+import path from 'path'
 import cors from 'cors'
 import chalk from 'chalk'
 import helmet from 'helmet'
-import express from 'express'
 import consola from 'consola'
+import express from 'express'
 import proxyRoutes from '@/routes/routes'
-
-import { config } from '@/config'
 
 // Configure consola based on debug mode
 if (config.debugMode) {
@@ -23,16 +25,43 @@ if (config.nodeEnv === 'development' && config.debugMode) {
 
 // Middleware
 app.use(cors())
-app.use(helmet())
+app.use(
+  helmet({
+    contentSecurityPolicy: false, // Disable CSP for static files
+  }),
+)
 app.use(express.json())
 
-// Serve favicon for root path
+// Serve favicon
 app.get('/favicon.ico', (_req, res) => {
-  res.status(204).end() // No content response, cleaner than 404
+  res.status(204).end()
 })
 
-// Routes
+// Landing page - serve static files
+app.use(express.static(path.join(__dirname, '../docs/dist')))
+
+// Handle proxy and guide routes
+app.get('/', (req, res, next) => {
+  // If it's a direct request to root, serve the landing page
+  if (req.path === '/') {
+    res.sendFile(path.join(__dirname, '../docs/dist/index.html'))
+  } else {
+    // For other paths, let the proxy routes handle it
+    next()
+  }
+})
+
+// Proxy routes for all other paths
 app.use('/', proxyRoutes)
+
+// Handle invalid URLs with guide
+app.use((err: any, _req: express.Request, res: express.Response, next: express.NextFunction) => {
+  if (err) {
+    getGuide(_req, res)
+  } else {
+    next()
+  }
+})
 
 // Start server
 app.listen(config.port, () => {
