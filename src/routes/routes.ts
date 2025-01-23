@@ -4,6 +4,7 @@ import { proxyRequest, healthCheck } from '@controllers/proxyController'
 const router = Router()
 
 router.get('/health-check', healthCheck)
-router.get('/:url(*)', proxyRequest)
+// Handle all HTTP methods for proxy requests
+router.all('/:url(*)', proxyRequest)
 
 export default router
