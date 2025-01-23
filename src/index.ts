@@ -26,6 +26,11 @@ app.use(cors())
 app.use(helmet())
 app.use(express.json())
 
+// Serve favicon for root path
+app.get('/favicon.ico', (_req, res) => {
+  res.status(204).end() // No content response, cleaner than 404
+})
+
 // Routes
 app.use('/', proxyRoutes)
 
