@@ -113,9 +113,15 @@ Response:
 Create a `.env` file in the root directory:
 
 ```env
-PORT=3000
-NODE_ENV=development
+PORT=3000              # Port number for the server (default: 3000)
+NODE_ENV=development   # Node environment (development/production)
+DEBUG_MODE=true       # Enable/disable debug logging (true/false)
 ```
+
+These variables can be configured in your `.env` file:
+- `PORT`: The port number where the server will run
+- `NODE_ENV`: The environment mode (development/production)
+- `DEBUG_MODE`: When set to true, enables detailed logging of proxy requests and responses
 
 ## Available Scripts
 
