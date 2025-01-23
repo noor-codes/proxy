@@ -34,22 +34,28 @@ export const getGuide = (_req: Request, res: Response) => {
     ],
     examples: [
       {
-        description: 'Simple GET request',
-        url: `${config.proxyUrl}/api.github.com/users/octocat`,
-        method: 'GET',
+        description: 'Get user information from JSONPlaceholder API',
+        url: `${config.proxyUrl}/jsonplaceholder.typicode.com/users/1`,
+        method: 'GET'
       },
       {
-        description: 'POST request with custom headers',
-        url: `${config.proxyUrl}/api.example.com/data`,
+        description: 'Get todos from JSONPlaceholder API',
+        url: `${config.proxyUrl}/jsonplaceholder.typicode.com/todos/1`,
+        method: 'GET'
+      },
+      {
+        description: 'Create a new post (JSONPlaceholder)',
+        url: `${config.proxyUrl}/jsonplaceholder.typicode.com/posts`,
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer YOUR_TOKEN',
+          'Content-Type': 'application/json'
         },
         body: {
-          key: 'value',
-        },
-      },
+          title: 'Example Post',
+          body: 'This is a test post',
+          userId: 1
+        }
+      }
     ],
     errors: {
       'Invalid URL': {
@@ -61,7 +67,7 @@ export const getGuide = (_req: Request, res: Response) => {
         causes: ['Target server is down', 'Network connectivity issues', 'Invalid request parameters'],
       },
     },
-    repository: 'https://github.com/yourusername/proxy',
+    repository: 'https://github.com/noor-codes/proxy',
   }
 
   res.json(guide)
