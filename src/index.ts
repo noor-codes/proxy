@@ -1,5 +1,6 @@
 import cors from 'cors'
 import chalk from 'chalk'
+import helmet from 'helmet'
 import express from 'express'
 import consola from 'consola'
 import proxyRoutes from '@/routes/routes'
@@ -15,6 +16,7 @@ if (config.nodeEnv === 'development') {
 
 // Middleware
 app.use(cors())
+app.use(helmet())
 app.use(express.json())
 
 // Routes
