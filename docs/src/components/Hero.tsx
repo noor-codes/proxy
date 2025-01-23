@@ -28,7 +28,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className='mx-auto max-w-2xl lg:mx-0 lg:max-w-xl lg:flex-shrink-0'
+          className='mx-auto max-w-2xl text-center lg:text-left lg:mx-0 lg:max-w-xl lg:flex-shrink-0'
         >
           <div className='mt-24 sm:mt-32 lg:mt-16'>
             <a href='https://github.com/noor-codes/proxy' className='inline-flex space-x-6'>
@@ -57,26 +57,28 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className='mt-10 flex items-center gap-x-6'
+            className='mt-10 flex justify-center lg:justify-start'
           >
-            <a
-              href='#documentation'
-              className='rounded-md bg-green-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600'
-            >
-              View Documentation
-            </a>
-            <a
-              href='https://github.com/noor-codes/proxy'
-              className='group text-sm font-semibold leading-6 text-gray-900 hover:text-green-600 inline-flex items-center gap-x-2 transition-all duration-300'
-            >
-              GitHub{' '}
-              <span
-                aria-hidden='true'
-                className='transition-transform duration-300 group-hover:translate-x-1'
+            <div className='flex flex-col sm:flex-row items-center gap-4 sm:gap-x-6'>
+              <a
+                href='#documentation'
+                className='rounded-md bg-green-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600'
               >
-                →
-              </span>
-            </a>
+                View Documentation
+              </a>
+              <a
+                href='https://github.com/noor-codes/proxy'
+                className='group text-sm font-semibold leading-6 text-gray-900 hover:text-green-600 inline-flex items-center gap-x-2 transition-all duration-300'
+              >
+                GitHub{' '}
+                <span
+                  aria-hidden='true'
+                  className='transition-transform duration-300 group-hover:translate-x-1'
+                >
+                  →
+                </span>
+              </a>
+            </div>
           </motion.div>
 
           {/* Creator Attribution */}
@@ -108,7 +110,7 @@ export default function Hero() {
           transition={{ duration: 0.8, delay: 0.4 }}
           className='mx-auto mt-16 flex max-w-2xl sm:mt-24 lg:mt-44 lg:ml-10 lg:mr-0 lg:max-w-none lg:flex-none xl:ml-32'
         >
-          <div className='max-w-xl lg:max-w-lg'>
+          <div className='max-w-xl mx-auto lg:max-w-lg'>
             <div className='grid grid-cols-1 gap-y-8 sm:grid-cols-2 sm:gap-x-12'>
               {stats.map((stat) => (
                 <motion.div
