@@ -63,36 +63,45 @@ yarn start
 
 ## Usage
 
-### Proxy Endpoint
+### Proxy Service
 
-The proxy server accepts requests in the following format:
-```
-http://localhost:3000/https://api.example.com/data
-```
+A powerful and secure proxy service for making HTTP requests.
 
-Example using axios:
+#### Using Fetch API
 ```javascript
-// Proxy a GET request to example.com using axios
+// Without proxy (will fail due to CORS)
+fetch('https://google.com')
+  .then(response => response.json())
+  .then(json => console.log(json))
+  .catch(error => console.error('Error:', error));
+
+// With proxy (will work)
+fetch('http://localhost:3000/google.com')
+  .then(response => response.text())
+  .then(html => console.log(html))
+  .catch(error => console.error('Error:', error));
+```
+
+#### Using Axios
+```javascript
+// Using axios with proxy
 const axios = require('axios');
 
-axios.get('http://localhost:3000/https://api.example.com/data')
+axios.get('http://localhost:3000/google.com')
   .then(response => console.log(response.data))
   .catch(error => console.error('Error:', error));
 ```
 
-Example using fetch:
-```javascript
-// Proxy a GET request to example.com
-fetch('http://localhost:3000/https://api.example.com/data')
-  .then(response => response.json())
-  .then(data => console.log(data))
-  .catch(error => console.error('Error:', error));
-```
+### Features
+- Automatic HTTPS (if protocol is not specified)
+- Header forwarding
+- CORS support
+- Error handling
 
-Example using curl:
-```bash
-curl "http://localhost:3000/https://api.example.com/data"
-```
+### Notes
+- The proxy will automatically add `https://` if protocol is not specified
+- All headers and body are forwarded to the target URL
+- Supports all HTTP methods (GET, POST, PUT, DELETE, etc.)
 
 ### Health Check
 
