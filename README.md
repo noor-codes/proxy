@@ -42,6 +42,7 @@ src/
 
 1. Clone the repository
 2. Install dependencies:
+
 ```bash
 yarn install
 ```
@@ -49,6 +50,7 @@ yarn install
 ## Development
 
 Run the development server with hot-reload:
+
 ```bash
 yarn dev
 ```
@@ -56,6 +58,7 @@ yarn dev
 ## Production
 
 Build and start the production server:
+
 ```bash
 yarn build
 yarn start
@@ -68,37 +71,44 @@ yarn start
 A powerful and secure proxy service for making HTTP requests.
 
 #### Using Fetch API
+
 ```javascript
 // Without proxy (will fail due to CORS)
 fetch('https://google.com')
-  .then(response => response.json())
-  .then(json => console.log(json))
-  .catch(error => console.error('Error:', error));
+  .then((response) => response.json())
+  .then((json) => console.log(json))
+  .catch((error) => console.error('Error:', error))
 
 // With proxy (will work)
 fetch('http://localhost:3000/google.com')
-  .then(response => response.text())
-  .then(html => console.log(html))
-  .catch(error => console.error('Error:', error));
+  .then((response) => response.text())
+  .then((html) => console.log(html))
+  .catch((error) => console.error('Error:', error))
 ```
 
+> **Note**: If you're pasting this code in the browser console, make sure you're on a page where the proxy is running (e.g., `http://localhost:3000`). It won't work if you are on `github.com`'s browser console, even with the proxy.
+
 #### Using Axios
+
 ```javascript
 // Using axios with proxy
-const axios = require('axios');
+const axios = require('axios')
 
-axios.get('http://localhost:3000/google.com')
-  .then(response => console.log(response.data))
-  .catch(error => console.error('Error:', error));
+axios
+  .get('http://localhost:3000/google.com')
+  .then((response) => console.log(response.data))
+  .catch((error) => console.error('Error:', error))
 ```
 
 ### Features
+
 - Automatic HTTPS (if protocol is not specified)
 - Header forwarding
 - CORS support
 - Error handling
 
 ### Notes
+
 - The proxy will automatically add `https://` if protocol is not specified
 - All headers and body are forwarded to the target URL
 - Supports all HTTP methods (GET, POST, PUT, DELETE, etc.)
@@ -106,11 +116,13 @@ axios.get('http://localhost:3000/google.com')
 ### Health Check
 
 You can verify the server is running by accessing the health check endpoint:
+
 ```
 GET http://localhost:3000/health-check
 ```
 
 Response:
+
 ```json
 {
   "message": "Server is running"
