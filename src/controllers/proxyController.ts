@@ -1,9 +1,8 @@
 import chalk from 'chalk'
 import consola from 'consola'
 
-import { fetchUrl, FetchError } from '@utils/fetch'
 import { Request, Response } from 'express'
-import { getGuide } from './guideController'
+import { fetchUrl, FetchError } from '@utils/fetch'
 
 export interface ErrorResponse {
   error: string
@@ -32,15 +31,21 @@ export const proxyRequest = async (req: Request, res: Response<unknown | ErrorRe
   }
 
   if (!urlParam) {
-    return getGuide(req, res)
+    return res.status(400).json({
+      error: 'Missing URL parameter',
+      details: 'Please provide a URL to proxy. Visit /info for usage details.',
+    })
   }
 
   // Validate URL before attempting to fetch
   if (!isValidUrl(urlParam)) {
     if (!isFaviconRequest) {
-      consola.error(chalk.red(`Invalid URL: ${urlParam}`))
+      consola.debug(chalk.red(`Invalid URL: ${urlParam}`))
     }
-    return getGuide(req, res)
+    return res.status(400).json({
+      error: 'Invalid URL',
+      details: 'The provided URL is not valid. Visit /info for usage details.',
+    })
   }
 
   try {
@@ -55,9 +60,38 @@ export const proxyRequest = async (req: Request, res: Response<unknown | ErrorRe
         consola.debug(chalk.blue(`Succeeded to fetch from ${urlParam}`))
         consola.debug(chalk.green(`Proxy response successful (${response.status})`))
       } else {
-        consola.error(chalk.red(`Proxy response unsuccessful (${response.status})`))
+        consola.debug(chalk.red(`Proxy response unsuccessful (${response.status})`))
       }
     }
+
+    // If there's an error in the response but we got a valid status code,
+    // pass through the original response with its status
+    if (response.error && response.status > 0) {
+      return res.status(response.status).json({
+        ...(typeof response.data === 'object' ? response.data : {}),
+        _proxy: {
+          error: response.error.message,
+          originalRequest: response.error.originalRequest
+        }
+      })
+    }
+    
+    // If it's a network or parsing error (status 0), return 500
+    if (response.error) {
+      return res.status(500).json({
+        error: 'Proxy request failed',
+        details: response.error.message,
+        url: urlParam,
+        method: req.method,
+        originalRequest: response.error.originalRequest,
+        response: {
+          status: response.status,
+          headers: Object.fromEntries(response.headers.entries()),
+          data: response.data,
+        },
+      })
+    }
+
     res.status(response.status).json(response.data)
   } catch (error) {
     // Only log if it's not a FetchError
@@ -79,6 +113,19 @@ export const proxyRequest = async (req: Request, res: Response<unknown | ErrorRe
       consola.debug(chalk.red(`Proxy response unsuccessful (${500})`))
     }
 
-    return getGuide(req, res)
+    const errorDetails = {
+      error: error instanceof Error ? error.name : 'Proxy Error',
+      details:
+        error instanceof Error ? error.message : 'An unexpected error occurred while proxying the request',
+      url: urlParam,
+      method: req.method,
+      ...(error instanceof FetchError && {
+        originalRequest: {
+          url: error.url,
+        },
+      }),
+    }
+
+    return res.status(500).json(errorDetails)
   }
 }
