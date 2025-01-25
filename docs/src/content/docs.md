@@ -59,6 +59,8 @@ axios.get(`${proxyUrl}/${targetUrl}`).then((response) => console.log(response.da
 
 Thank you for considering contributing to our project! We welcome contributions from everyone.
 
+<br/>
+
 ### Ways to Contribute
 
 - 🐛 Report bugs and issues
@@ -66,6 +68,8 @@ Thank you for considering contributing to our project! We welcome contributions 
 - 📝 Improve documentation
 - 🔍 Review pull requests
 - 💻 Submit your own code changes
+
+<br/>
 
 ### Getting Started
 
